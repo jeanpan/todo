@@ -7,7 +7,17 @@ todoApp
         $http.get('https://api.mongolab.com/api/1/databases/demo/collections/todos?apiKey=7UXlLmyjPYorBQW2Owxe6hKNI5Xl1iRn')
             .success(function(data, status, headers, config){
 
-                $scope.todos = data;
+                $scope.todos = [];
+                $scope.olds = [];
+                //$scope.todos = data;
+
+                angular.forEach(data, function(todo){
+                    if (!todo.done) {
+                        $scope.todos.push(todo);
+                    } else {
+                        $scope.olds.push(todo);
+                    }
+                });
 
                 $scope.addTodo = function() {
                     //$scope.todos.push({text: $scope.todoText, done: false});
@@ -31,31 +41,50 @@ todoApp
                     });
                     return count;
                 };
-
+                // todo move to done.
                 $scope.archive = function() {
-                    var oldTodos = $scope.todos;
-                    $scope.old = [];
-                    $scope.todos = [];
-                    angular.forEach(oldTodos, function(todo) {
+                    var todos = $scope.todos;
+                    //var oldTodos = $scope.todos;
+                    //$scope.olds = [];
+                    //$scope.todos = [];
+                    angular.forEach(todos, function(todo) {
                         if (!todo.done) {
                             $scope.todos.push(todo);
                         } else {
-                            console.log(todo.text);
-                            /*
-                            var update = 'https://api.mongolab.com/api/1/databases/demo/collections/todos?apiKey=7UXlLmyjPYorBQW2Owxe6hKNI5Xl1iRn&q={"text":' + todo.text + '}';
-                            console.log(update);
-                            $http.post(update, { "$set" : {"done": true}})
-                                .success(function(data, status, headers, config) {
-                                    console.log(data);
-                                })
-                                .error(function(data, status, headers, config) {
-                                    console.log('update data fail');
-                                });
-                            */
-                            $scope.old.push(todo);                            
+                            // update db data.
+                            var update = 'https://api.mongolab.com/api/1/databases/demo/collections/todos?apiKey=7UXlLmyjPYorBQW2Owxe6hKNI5Xl1iRn&q={"text":"' + todo.text + '"}';
+                            $http({
+                                method: 'PUT',
+                                url: update,
+                                data: JSON.stringify({"$set" : {"done": true}}),
+                                headers: { 'Content-Type': 'application/json' }
+                            })
+                            .success(function(data, status, headers, config) {
+                                console.log(data);
+                            })
+                            .error(function(data, status, headers, config) {
+                                console.log('error');
+                            });
+                            
+                            $scope.olds.push(todo);                            
                         }
                     });
                     console.log($scope.old);
+                };
+
+                // done move to todo.
+                $scope.undo = function() {
+                    var olds = $scope.olds;
+
+                    angular.forEach(olds, function(old) {
+                        console.log(old);
+                        if (!old.done) {
+                            $scope.todos.push(old);
+                            //$
+                            //console.log()
+                        }
+                    });
+
                 };
 
             })
