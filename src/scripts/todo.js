@@ -42,17 +42,16 @@ todoApp
                     var todos = $scope.todos;
 
                     angular.forEach(todos, function(todo) {
-                        var index = $scope.todos.indexOf(todo);
-
                         if (todo.done) {
                             var query = 'https://api.mongolab.com/api/1/databases/demo/collections/todos?apiKey=7UXlLmyjPYorBQW2Owxe6hKNI5Xl1iRn&q={"text":"' + todo.text + '"}';
                             $http({
                                 method: 'PUT',
                                 url: query,
-                                data: JSON.stringify({"$set" : {"done": true}}),
+                                data: JSON.stringify({'$set' : {'done': true}}),
                                 headers: { 'Content-Type': 'application/json' }
                             })
                             .success(function(data, status, headers, config) {
+                                var index = $scope.todos.indexOf(todo);
                                 $scope.olds.push(todo);
                                 $scope.todos.splice(index, 1);
                             })
@@ -68,17 +67,16 @@ todoApp
                     var olds = $scope.olds;
 
                     angular.forEach(olds, function(old) {
-                        var index = $scope.olds.indexOf(old);
-                        
                         if (!old.done) {
                             var query = 'https://api.mongolab.com/api/1/databases/demo/collections/todos?apiKey=7UXlLmyjPYorBQW2Owxe6hKNI5Xl1iRn&q={"text":"' + old.text + '"}';
                             $http({
                                 method: 'PUT',
                                 url: query,
-                                data: JSON.stringify({"$set" : {"done": false}}),
+                                data: JSON.stringify({'$set' : {'done': false}}),
                                 headers: { 'Content-Type': 'application/json' }
                             })
                             .success(function(data, status, headers, config) {
+                                var index = $scope.olds.indexOf(old);
                                 $scope.todos.push(old);
                                 $scope.olds.splice(index, 1);
                             })
