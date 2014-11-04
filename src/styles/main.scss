@@ -1,4 +1,60 @@
+html {
+    font-size: 100%;
+}
+
 .done-true {
     text-decoration: line-through;
     color: #666;
+}
+
+ul {
+    padding: 0;
+
+    li {
+        list-style: none;
+
+        span {
+            display: inline-block;
+            margin-left: 5px;
+        }
+    }
+}
+
+.box {
+    padding: 3%;
+
+    h3 {
+        text-align: center;
+    }
+    
+    &.one {
+        background: #B2DCAC;
+        color: #3E4951;
+    }
+
+    &.two {
+        background: #F9B256;
+        color: #3E4951;        
+    }
+}
+
+.example {
+    border-top: none;
+    background-color: #219f19;
+    color: #fff;
+}
+
+.grid {
+    span {
+        background: rgba(225,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.2);
+        display: block;
+        padding: 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+}
+
+footer {
+    text-align: right;
 }
